@@ -3,9 +3,9 @@ import heapq
 import time
 
 
-solution_depth = 0;
-numNodes_expanded = 0;
-max_queue_size = 0;
+solution_depth = 0
+numNodes_expanded = 0
+max_queue_size = 0
 
 def print_matrix(pState):
     for r in pState:
@@ -162,9 +162,9 @@ def expand_node(psNode,n):
 
 
 def uniform_cost_search(initialState,sol,n):
-    global solution_depth;
-    global numNodes_expanded;
-    global max_queue_size;
+    global solution_depth
+    global numNodes_expanded
+    global max_queue_size
     hq = []
     expanded_set = set()
     iniNode = psNode(pState=initialState,g=0)
@@ -211,9 +211,9 @@ def uniform_cost_search(initialState,sol,n):
             heapq.heappush(hq,(chNode.g,chNode))
 
 def misplaced_tile_heuristic(initialState,sol,n):
-    global solution_depth;
-    global numNodes_expanded;
-    global max_queue_size;
+    global solution_depth
+    global numNodes_expanded
+    global max_queue_size
     hq = []
     expanded_set = set()
     hval = get_misplaced_tiles(initialState,sol, n)
@@ -257,14 +257,14 @@ def misplaced_tile_heuristic(initialState,sol,n):
             
             #make node
 
-            chNode = psNode(pState=s,g=cur_g+1,h=get_misplaced_tiles(initialState,sol, n))
+            chNode = psNode(pState=s,g=cur_g+1,h=get_misplaced_tiles(s,sol, n))
             #push to h
             heapq.heappush(hq,(chNode.getSum(),chNode))
 
 def manhattan_distance_heuristic(initialState,sol,n):
-    global solution_depth;
-    global numNodes_expanded;
-    global max_queue_size;
+    global solution_depth
+    global numNodes_expanded
+    global max_queue_size
     hq = []
     expanded_set = set()
     hval = get_manhattan_distance(initialState,sol, n)
@@ -308,7 +308,9 @@ def manhattan_distance_heuristic(initialState,sol,n):
             
             #make node
 
-            chNode = psNode(pState=s,g=cur_g+1,h=get_manhattan_distance(initialState,sol, n))
+            chNode = psNode(pState=s,g=cur_g+1,h=get_manhattan_distance(s,sol, n))
+            #print("new chnode is")
+            #print_node(chNode)
             #push to h
             heapq.heappush(hq,(chNode.getSum(),chNode))
 
@@ -332,16 +334,20 @@ def main():
     print("The puzzle you entered is: ")
     #print(puzzleState)
     print_matrix(puzzleState)
+    method_str=""
 
     start_time = time.time()
     if method_type==1:
         print("Uniform Cost Search")
+        method_str = "Uniform Cost Search"
         result = uniform_cost_search(puzzleState,solState,n)
     elif method_type==2:
         print("A* with Misplaced Tile Heuristic")
+        method_str="A* with Misplaced Tile Heuristic"
         result = misplaced_tile_heuristic(puzzleState,solState,n)
     elif method_type==3:
         print("A* with Manhattan Distance Heuristic")
+        method_str="A* with Manhattan Distance Heuristic"
         result = manhattan_distance_heuristic(puzzleState,solState,n)
 
     #result = uniform_cost_search(puzzleState,solState,n)
@@ -351,6 +357,7 @@ def main():
 
     end_time = time.time()
     time_elapsed = end_time-start_time
+
     if result:
         print("It is the goal state. Puzzle solved!")
         print_matrix(result)
@@ -365,6 +372,31 @@ def main():
         print("Number of nodes expanded is: ", numNodes_expanded)
         print("Max queue size is: ", max_queue_size)
         print(f"Elapsed time is: {time_elapsed} seconds")
+    
+    print(method_str)
+
+# def main():
+
+# #for testing
+#     n = get_puzzle_size()
+
+#     #create solution based on n
+#     solState = create_solution(n)
+
+#     # generate sample input
+#     sample_input = format_sample_input(n)
+
+#     puzzleState = get_puzzle(sample_input,n)
+
+
+#     print("The puzzle you entered is: ")
+#     #print(puzzleState)
+#     print_matrix(puzzleState)
+
+#     res = get_manhattan_distance(puzzleState,solState,n)
+#     print("res is, ", res)
+
+
 
 
 if __name__ == "__main__":
